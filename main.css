@@ -1,0 +1,371 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 60px;
+    /* 固定ヘッダーの高さ分のスペースを確保 */
+}
+
+#app {
+    margin-top: 10px;
+}
+
+.image-wrap {
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tool-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    display: flex;
+    margin-bottom: 10px;
+    background: #dedede;
+    padding: 0 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tool-header-item {
+    display: flex;
+    align-items: center;
+}
+
+.tool-header-item button,
+.tool-header-item select {
+    height: 25px;
+}
+
+.tool-header-item.connection-settings {
+    flex: 1;
+}
+
+.tool-header-item.airport-settings {
+    justify-content: end;
+    flex: 1;
+}
+
+select#group {
+    margin-left: 10px;
+}
+
+.toggle-button {
+    background-color: #888;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.toggle-button:hover {
+    opacity: 0.8;
+}
+
+.toggle-button.active {
+    background-color: #4CAF50;
+}
+
+.frequency-display {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+span.freq {
+    margin: 0 13px;
+    font-size: 35px;
+}
+
+span.freq {
+    margin: 0 13px;
+}
+
+.freq-wrap {
+    display: flex;
+    margin-bottom: 3px;
+}
+
+.group-label {
+    width: 25px;
+    background: #a5a5a5;
+    box-sizing: border-box;
+}
+
+.group-label span {
+    box-sizing: border-box;
+    transform: rotate(90deg);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    margin-top: 10px;
+}
+
+.freq-area-wrap {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    background: #f2f2f2;
+}
+
+.freq-area-label {
+    width: 100%;
+    background: #ddd;
+    padding: 0 10px;
+    font-size: 0.7em;
+}
+
+.freq-section {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.freq-button-wrap {
+    width: 100%;
+}
+
+.freq-button {
+    width: 20%;
+    box-sizing: border-box;
+    margin: 0;
+    background-color: yellow;
+    border: 1px solid #ccc;
+    padding: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.freq-button:hover {
+    background-color: #ffd700;
+}
+
+.freq-button.selected-freq {
+    background: #0F0;
+}
+
+.freq-freq:after {
+    content: " MHz";
+    font-size: 0.8em;
+}
+
+#map {
+    width: 400px;
+    height: 300px;
+    background: url('path_to_your_map_image.jpg') no-repeat center center;
+    background-size: cover;
+    border: 1px solid #000;
+    margin-top: 10px;
+}
+
+/* 設定画面のホバー要素 */
+.settings-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.settings-modal {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f8f9fa;
+}
+
+.settings-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.close-button:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.settings-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.group-management {
+    margin-bottom: 20px;
+}
+
+.group-management h4,
+.group-management h5,
+.group-management h6 {
+    margin: 15px 0 10px 0;
+    color: #333;
+}
+
+.group-management h4 {
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+.group-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.group-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.group-button:hover {
+    background-color: #e0e0e0;
+}
+
+.group-button.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #45a049;
+}
+
+.group-details {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.group-info {
+    margin-bottom: 15px;
+}
+
+.group-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.available-groups,
+.current-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.add-group-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.add-group-button:hover {
+    background-color: #45a049;
+}
+
+.remove-group-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.remove-group-button:hover {
+    background-color: #da190b;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.reset-button {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #f57c00;
+}
+
+.save-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #1976D2;
+}

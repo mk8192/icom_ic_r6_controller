@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Page Title</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    </head>
+
+    <body>
+        <div id="app">
+            <div class="tool-header">
+                <div class="tool-header-item connection-settings">
+                    <select id="baudrate">
+                        <option value="300">300bps</option>
+                        <option value="1200">1200bps</option>
+                        <option value="4800">4800bps</option>
+                        <option value="9600" selected>9600bps</option>
+                        <option value="19200">19200bps</option>
+                    </select>
+                    <button id="serial-connect" v-on:click="connectSerial()" v-bind:disabled="!!port">接続</button>　　
+                    <a href="image/RJAA.svg">RJAA map</a>
+                    <a href="image/RJTT.svg">RJTT map</a>
+                </div>
+                <div class="tool-header-item frequency-display"><span class="freq">{{frequencyDisplay}}</span>MHz {{getSectionName()}}</div>
+                <div class="tool-header-item airport-settings">
+                    <button class="toggle-button" v-bind:class="{active: showMapImage}" v-on:click="showMapImage = !showMapImage">MAP</button>
+                    <button class="toggle-button" v-bind:class="{active: showSetting}" v-on:click="showSetting = !showSetting">SETTING</button>
+                    <select id="group" v-model="airport">
+                        <option v-for="item in groupdata" :value="item.airport">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <!-- <button @click="debug()">でぶぼたん</button> -->
+
+            <!-- 設定画面のホバー要素 -->
+            <div class="settings-overlay" v-if="showSetting">
+                <div class="settings-modal">
+                    <div class="settings-header">
+                        <h3>設定</h3>
+                        <button class="close-button" v-on:click="showSetting = false">×</button>
+                    </div>
+                    <div class="settings-content">
+                        <h4>Group Data 管理</h4>
+                        <div class="group-management">
+                            <div class="group-list">
+                                <h5>空港グループ</h5>
+                                <div class="group-buttons">
+                                    <button v-for="item in groupdata" :key="item.airport" class="group-button" v-bind:class="{active: selectedGroupItem === item}" v-on:click="selectGroupItem(item)">
+                                        {{item.airport}}
+                                    </button>
+                                </div>
+                                <div class="control-buttons">
+                                    <button class="reset-button" v-on:click="resetGroupDataToDefault()">デフォルトに戻す</button>
+                                    <button class="save-button" v-on:click="saveGroupDataToStorage()">設定を保存</button>
+                                </div>
+                            </div>
+
+                            <div class="group-details" v-if="selectedGroupItem">
+                                <h5>{{selectedGroupItem.airport}} の詳細</h5>
+                                <div class="group-info">
+                                    <p><strong>空港:</strong> {{selectedGroupItem.airport}}</p>
+                                    <p><strong>グループ:</strong> {{selectedGroupItem.group.join(', ')}}</p>
+                                    <p><strong>マップ:</strong> {{selectedGroupItem.image}}</p>
+                                </div>
+
+                                <h6>利用可能なグループを追加</h6>
+                                <div class="available-groups">
+                                    <button v-for="group in getAvailableGroups()" :key="group" class="add-group-button" v-on:click="addGroupToSelected(group)">
+                                        + {{group}}
+                                    </button>
+                                </div>
+
+                                <h6>現在のグループから削除</h6>
+                                <div class="current-groups">
+                                    <button v-for="group in selectedGroupItem.group" :key="group" class="remove-group-button" v-on:click="removeGroupFromSelected(group)">
+                                        - {{group}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-wrap" v-if="showMapImage">
+                <img style="width: 100%;" v-bind:src="groupdata.find(g=>g.airport === airport).image">
+            </div>
+
+            <div class="freq-wrap" v-for="group in groupdata.find(g=>g.airport === airport).group">
+                <div class="group-label"><span>{{getGroupNameByCode(group)}}</span></div>
+                <div class="freq-button-wrap">
+                    <div class="freq-area-wrap" v-for="area in getAreaList(group)">
+                        <div class="freq-area-label">{{area}}</div>
+                        <div v-bind:class="{'freq-button':true, 'selected-freq':f.freq === currentFreq}" v-for="f in freqdata.filter(f=>f.group === group && f.area === area)" v-on:click="onClickFreqButton(f.freq)">
+                            <div class="freq-section">{{ f.section }}</div>
+                            <div class="freq-freq">{{ f.freq.toFixed(3) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+
+    <script src="vue.global.js"></script>
+    <script src='icomSerial.js'></script>
+    <script>
+        const freqdata = [];
+        const airportData = {};
+        const groupdata = [
+            { airport: 'HND', name: "羽田 HND", group: ['HND', 'CT_TOKYO'], image: "image/MAP_HND.jpg" },
+            { airport: 'NRT', name: "成田 NRT", group: ['NRT', 'CT_TOKYO'], image: "image/MAP_NRT.png" },
+            { airport: 'ITM', name: "伊丹 ITM", group: ['ITM'], image: "image/MAP_ITM.jpg" },
+            { airport: 'WKJ', name: "稚内 WKJ", group: ['WKJ', 'CT_SAPPORO'], image: "image/MAP_WKJ.gif" },
+            { airport: 'AKJ', name: "旭川 AKJ", group: ['AKJ', 'CT_SAPPORO'], image: "image/MAP_AKJ.jpg" },
+        ]
+    </script>
+    <script src="freq/hnd.js"></script>
+    <script src="freq/nrt.js"></script>
+    <script src="freq/wkj.js"></script>
+    <script src="freq/akj.js"></script>
+    <script src="freq/ctrl_tokyo.js"></script>
+    <script src="freq/ctrl_sapporo.js"></script>
+    <script src='main.js'></script>
+
+</html>
