@@ -1,0 +1,2 @@
+# icom_ic_r6_controller
+ICOM製ワイドバンドレシーバーIC-R6の制御ツール
